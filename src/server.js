@@ -1,8 +1,10 @@
 import http from 'http'
 import express, { response } from 'express'
 import { error } from 'console'
-import questionsRouter from './routers/questionsRouter.js'
-import usersRouter from './routers/usersRouter.js'
+import { logger } from '../middleware/logger.js'
+import questionsRouter from '../routers/questionsRoutes.js'
+import usersRouter from '../routers/usersRoutes.js'
+import authRouter from '../routers/authRouter.js'
 
 const PORT = process.env.PORT || 3000
 /*
@@ -21,5 +23,6 @@ app.listen(PORT, ()=>{
 })
 
 app.use(express.json())
-app.use('/questions', questionsRouter)
+app.use('/questions', logger,questionsRouter)
 app.use('/users', usersRouter)
+app.use('/auth', authRouter)

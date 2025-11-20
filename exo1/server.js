@@ -1,7 +1,7 @@
 import http from 'http'
 import express, { response } from 'express'
 import { error } from 'console'
-import todosRoutes from '/todos/todosRoutes/js'
+import todosRoutes from './todos/todosRoutes.js'
 
 const PORT = process.env.PORT || 3000
 

@@ -1,12 +1,49 @@
-import { fs} from 'fs'
+import { error } from 'console'
+import { readFile, writeFile } from 'fs/promises'
+import { randomUUID } from 'crypto'
+//SE SOUVENIR DE CET IMPORT
 
-export async function writeInFile(todoJson){
-    new Promise((resolve, reject)=>{
-        if(!fs.exists('../todos.json')){
-            
+const readTodos = async()=>{
+    try{
+        const content = await readFile('./exo1/todos.json', 'utf-8') 
+        return JSON.parse(content)
+    }catch(error){
+        if(error.code === "ENOENT"){
+            return []
         }
-    })
+        throw error
+    }
+}
 
-    fs.writeFile('../todos.json', )
+
+const writeInFile = async(req, res)=> {
+    //TOUJOURS METTRE DES TRY CATCH DANS DES ASYNCHRONES
+    try{
+        const { text, completed = false } = req.body
+        //completed = false s'exécute uniquement si pas défini
+        if(!text.trim() || typeof completed !== 'boolean'){
+            //pas oublier le trim
+            return res.status(400).send({
+                error: 'Invalid body'
+            })
+            //return != res.send()
+        }
+
+        const todos = await readTodos()
+
+        todos.push({
+            id: randomUUID(),
+            text: text.trim(),
+            completed
+        })
+
+        await writeFile('./exo1/todos.json', JSON.stringify(todos, null, 2))
+
+        res.status(201).send({
+            message: 'Todo created'
+        })
+    }catch (error){
+        res.status(500).send(error)
+    }
     
 }

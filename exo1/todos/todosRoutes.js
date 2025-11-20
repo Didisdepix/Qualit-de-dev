@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { writeTodo } from './todosController.js'
+import { writeInFile } from './todosController.js'
 
 const router = Router()
 
-router.post("/", writeTodo)
+router.post("/", writeInFile)
